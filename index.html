@@ -43,7 +43,6 @@
             min-height: 100vh;
         }
 
-        /* Top Stats Bar & FY Filter - Fully Mobile Grid */
         .fy-filter-wrapper {
             max-width: 1280px;
             margin: 0 auto 10px auto;
@@ -144,7 +143,6 @@
             gap: 8px;
         }
 
-        /* Segmented Responsive Navigation Tabs */
         .mode-tabs { 
             display: flex; 
             gap: 4px; 
@@ -182,11 +180,9 @@
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12); 
         }
         
-        /* Flex row adapting on small screens */
         .flex-row { display: flex; gap: 10px; }
         .flex-row div { flex: 1; }
         
-        /* Table Controls for Mobile Horizontal Scroll */
         .table-responsive {
             width: 100%; 
             overflow-x: auto; 
@@ -197,10 +193,9 @@
         }
 
         table { width: 100%; border-collapse: collapse; min-width: 300px; }
-        th, td { border-bottom: 1px solid #f1f5f9; padding: 10px 12px; text-align: left; font-size: 13px; }
-        th { background: #f8fafc; color: #475569; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+        th, td { border-bottom: 1px solid #f1f5f9; padding: 10px 12px; font-size: 13px; }
+        th { background: #f8fafc; color: #475569; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; }
         
-        /* Interactive Touch Buttons */
         .btn { 
             padding: 12px; border: none; border-radius: 10px; cursor: pointer; 
             font-weight: 700; width: 100%; margin-top: 10px; font-size: 13.5px;
@@ -223,7 +218,6 @@
 
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         
-        /* Dynamic Summary Box */
         .summary-box { 
             margin-top: 16px; 
             background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%); 
@@ -234,7 +228,6 @@
         .summary-row { display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px; font-weight: 600; color: #3730a3; }
         .summary-row.final { font-size: 16px; font-weight: 800; color: #1e1b4b; border-top: 2px dashed #a5b4fc; padding-top: 8px; margin-bottom: 0; }
         
-        /* History Section */
         .history-item { 
             border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; margin-bottom: 10px; 
             background: #ffffff; position: relative; overflow: hidden;
@@ -252,7 +245,6 @@
         .qr-box { text-align: center; border: 2px dashed #a5b4fc; padding: 6px; border-radius: 8px; width: 100px; background: #fff; }
         #uploadedQrPreview { width: 85px; height: 85px; object-fit: contain; margin: 0 auto; display: block; }
 
-        /* Mobile Layout Media Queries */
         @media (max-width: 900px) {
             body { padding: 8px; }
             .container { grid-template-columns: 1fr; }
@@ -266,7 +258,6 @@
             .tab-btn { font-size: 11px; padding: 8px 4px; }
         }
 
-        /* Printable Area Formatting */
         #printableInvoice { 
             display: none; 
             background: #fff;
@@ -278,9 +269,60 @@
         }
 
         @media print {
-            body { background: white !important; margin: 0 !important; padding: 0 !important; }
+            html, body { 
+                background: white !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                min-height: auto !important; 
+                height: auto !important;
+            }
             .no-print { display: none !important; }
-            #printableInvoice { display: block !important; width: 100% !important; padding: 0 !important; }
+            
+            #printableInvoice { 
+                display: block !important; 
+                width: 100% !important; 
+                padding: 15px !important; 
+                margin: 0 !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                box-sizing: border-box !important;
+            }
+            
+            @page {
+                size: A4;
+                margin: 0mm; 
+            }
+
+            /* બધી કૉલમ ડિફોલ્ટ સેન્ટર રહેશે */
+            #printableInvoice table th, 
+            #printableInvoice table td {
+                text-align: center !important;
+            }
+            
+            /* માત્ર Qty અને Total હેડર સેન્ટરમાં રહેશે */
+            #printableInvoice table th.qty-header,
+            #printableInvoice table th.total-header {
+                text-align: center !important;
+            }
+
+            /* આઇટમનું નામ અને પ્રાઇસ ડાબી બાજુ રહેશે */
+            #printableInvoice table td.item-name-col {
+                text-align: left !important;
+                padding-left: 12px !important;
+            }
+
+            #printableInvoice table td.price-val-col {
+                text-align: left !important;
+                padding-left: 12px !important;
+            }
+
+            /* ફ્ક્ત Qty અને Total ની યાદી જમણી બાજુ રહેશે */
+            #printableInvoice table td.qty-val-col,
+            #printableInvoice table td.total-val-col {
+                text-align: right !important;
+                padding-right: 12px !important;
+            }
         }
     </style>
 </head>
@@ -384,10 +426,11 @@
                 <table id="itemsTable">
                     <thead>
                         <tr id="tableHeaderRow">
-                            <th>Item Description</th>
-                            <th>Price</th>
-                            <th>Qty</th>
-                            <th>Total</th>
+                            <th style="width: 50px; text-align: center; font-weight: 800;">No.</th>
+                            <th style="text-align: center; font-weight: 800;">Item Description</th>
+                            <th style="text-align: center; font-weight: 800;">Price</th>
+                            <th style="text-align: center; font-weight: 800;">Qty</th>
+                            <th style="text-align: center; font-weight: 800;">Total</th>
                             <th style="text-align: center;">Action</th>
                         </tr>
                     </thead>
@@ -451,10 +494,10 @@
                 <table id="advanceTable">
                     <thead>
                         <tr>
-                            <th>Party Name</th>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Method</th>
+                            <th style="text-align: center;">Party Name</th>
+                            <th style="text-align: center;">Date</th>
+                            <th style="text-align: center;">Amount</th>
+                            <th style="text-align: center;">Method</th>
                             <th style="text-align: center;">Action</th>
                         </tr>
                     </thead>
@@ -480,40 +523,41 @@
 <div id="printableInvoice">
     <h3 style="text-align: center; font-weight: 800; margin-bottom: 16px; letter-spacing: 1px; color: #0f172a;" id="printDocType">INVOICE</h3>
     
-    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px;">
         <div>
             <h3 style="margin: 0; color: #4f46e5; font-size: 20px; font-weight: 800;">Laxmi Electrical</h3>
             <p style="margin: 2px 0 0 0; font-weight: 700; color: #334155;">Kalpesh Patel</p>
             <p style="margin: 2px 0 0 0; color: #64748b; font-size: 12px;">Mo: 7984109659</p>
         </div>
-        <div style="text-align: right; color: #334155;">
-            <p style="margin: 0; font-size: 12px;"><strong>To:</strong> <span id="printPartyName"></span></p>
-            <p style="margin: 2px 0; font-size: 12px;"><strong><span id="printNoLabel">Bill No</span>:</strong> <span id="printBillNo"></span></p>
-            <p style="margin: 0; font-size: 12px;"><strong>Date:</strong> <span id="printBillDate"></span></p>
+        <div style="text-align: right;">
+            <p style="margin: 0 0 6px 0; font-size: 16px; color: #0f172a;"><strong>To:</strong> <span id="printPartyName" style="font-size: 18px; font-weight: 800; color: #0f172a; text-decoration: underline;"></span></p>
+            <p style="margin: 2px 0; font-size: 12px; color: #334155;"><strong><span id="printNoLabel">Bill No</span>:</strong> <span id="printBillNo"></span></p>
+            <p style="margin: 0; font-size: 12px; color: #334155;"><strong>Date:</strong> <span id="printBillDate"></span></p>
         </div>
     </div>
 
-    <h4 style="margin-bottom: 6px; color: #0f172a; font-size: 13px;">Work Details</h4>
+    <h4 style="margin-bottom: 6px; color: #0f172a; font-size: 13px; text-align: center;">Work Details</h4>
     <table style="width:100%; border-collapse: collapse; margin-top: 4px;" border="1" borderColor="#e2e8f0">
         <thead>
-            <tr id="printTableHeader" style="background-color: #f8fafc; color: #475569; font-size: 11px;">
-                <th style="padding: 6px;">Item Description</th>
-                <th style="padding: 6px;">Price</th>
-                <th style="padding: 6px;">Qty</th>
-                <th style="padding: 6px;">Total</th>
+            <tr style="background-color: #f8fafc; color: #475569; font-size: 12px;">
+                <th style="width: 40px; padding: 6px; text-align: center; font-weight: 800;">No.</th>
+                <th style="padding: 6px; text-align: center; font-weight: 800;">Item Description</th>
+                <th class="price-header" style="padding: 6px; text-align: center; font-weight: 800;">Price</th>
+                <th class="qty-header" style="padding: 6px; text-align: center; font-weight: 800;">Qty</th>
+                <th class="total-header" style="padding: 6px; text-align: center; font-weight: 800;">Total</th>
             </tr>
         </thead>
         <tbody id="printItemsList" style="font-size: 12px;"></tbody>
     </table>
 
     <div id="printAdvanceContainer">
-        <h4 style="margin: 12px 0 4px 0; color: #b45309; font-size: 13px;">Advance Payments Received</h4>
+        <h4 style="margin: 12px 0 4px 0; color: #b45309; font-size: 13px; text-align: center;">Advance Payments Received</h4>
         <table style="width:100%; border-collapse: collapse; margin-top: 4px;" border="1" borderColor="#e2e8f0">
             <thead>
-                <tr style="background-color: #f8fafc; color: #475569; font-size: 11px;">
-                    <th style="padding: 6px;">Date</th>
-                    <th style="padding: 6px;">Payment Method</th>
-                    <th style="padding: 6px;">Amount Paid</th>
+                <tr style="background-color: #f8fafc; color: #475569; font-size: 12px;">
+                    <th style="padding: 6px; text-align: center; font-weight: 800;">Date</th>
+                    <th style="padding: 6px; text-align: center; font-weight: 800;">Payment Method</th>
+                    <th style="padding: 6px; text-align: center; font-weight: 800;">Amount Paid</th>
                 </tr>
             </thead>
             <tbody id="printAdvanceList" style="font-size: 12px;"></tbody>
@@ -525,11 +569,11 @@
             <span>Total Bill Amount:</span>
             <span>₹<span id="printGrandTotal">0.00</span></span>
         </div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:#dc2626;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:#dc2626;" id="printAdvanceRow">
             <span>Total Advance Paid:</span>
             <span>- ₹<span id="printTotalAdvance">0.00</span></span>
         </div>
-        <div style="display:flex; justify-content:space-between; font-weight:800; border-top:1.5px solid #1e293b; padding-top:4px; color:#4f46e5; font-size: 14px;">
+        <div style="display:flex; justify-content:space-between; font-weight:800; border-top:1.5px solid #1e293b; padding-top:4px; color:#4f46e5; font-size: 14px;" id="printBalanceRow">
             <span>Balance Due:</span>
             <span>₹<span id="printBalanceDue">0.00</span></span>
         </div>
@@ -593,9 +637,7 @@
         document.getElementById('billDate').valueAsDate = new Date();
         document.getElementById('advDate').valueAsDate = new Date();
         
-        // Auto select current Financial Year based on today's date
         setSelectedFinancialYear();
-
         loadDatalist();
         generateBillNumber();
         renderHistory();
@@ -604,12 +646,11 @@
         if (savedQrBase64) document.getElementById('qrUploadStatus').style.display = 'inline';
     };
 
-    // Helper: Find Financial Year from Date String (YYYY-MM-DD)
     function getFinancialYear(dateString) {
         if (!dateString) return '';
         const dateObj = new Date(dateString);
         const year = dateObj.getFullYear();
-        const month = dateObj.getMonth() + 1; // Jan = 1, Apr = 4
+        const month = dateObj.getMonth() + 1;
         
         if (month >= 4) {
             return `${year}-${(year + 1).toString().slice(-2)}`;
@@ -631,7 +672,6 @@
         const selectedFY = document.getElementById('fySelect').value;
         const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
         
-        // Update Labels
         document.querySelectorAll('.selected-fy-label').forEach(el => el.innerText = selectedFY);
 
         let totalRev = 0;
@@ -683,7 +723,9 @@
             document.getElementById('formTitle').innerHTML = mode === 'bill' ? '<i class="ri-shield-flash-line"></i> Create Invoice' : '<i class="ri-file-paper-line"></i> Create Quotation';
             document.getElementById('noLabel').innerText = mode === 'bill' ? 'Bill No:' : 'Quotation No:';
             document.getElementById('printBtnText').innerHTML = mode === 'bill' ? '<i class="ri-printer-line"></i> Print Document' : '<i class="ri-printer-line"></i> Print Quotation';
+            
             document.getElementById('grandTotalContainer').style.display = mode === 'bill' ? 'block' : 'none';
+            
             generateBillNumber();
             updateTable();
         }
@@ -749,33 +791,33 @@
         savedAdvances.push({ party, amount, date, method });
         localStorage.setItem('savedAdvances', JSON.stringify(savedAdvances));
 
-        alert(`Advance of ₹${amount} saved for ${party}`);
         document.getElementById('advPartyName').value = '';
         document.getElementById('advAmount').value = '';
+        document.getElementById('advDate').valueAsDate = new Date();
         renderAdvanceTable();
+        alert("Advance entry saved successfully!");
     }
 
     function renderAdvanceTable() {
         const tbody = document.getElementById('advanceTableBody');
+        if (!tbody) return;
         tbody.innerHTML = '';
         let savedAdvances = JSON.parse(localStorage.getItem('savedAdvances')) || [];
-
+        
         savedAdvances.forEach((adv, index) => {
             tbody.innerHTML += `
                 <tr>
-                    <td><b>${escapeHtml(adv.party)}</b></td>
-                    <td>${adv.date}</td>
-                    <td>₹${adv.amount.toFixed(2)}</td>
-                    <td>${adv.method}</td>
-                    <td style="text-align: center;">
-                        <button type="button" class="btn-delete-item" onclick="deleteAdvanceEntry(${index})">Delete</button>
-                    </td>
+                    <td style="text-align: center;">${adv.party}</td>
+                    <td style="text-align: center;">${adv.date}</td>
+                    <td style="text-align: center;">₹${adv.amount.toFixed(2)}</td>
+                    <td style="text-align: center;">${adv.method}</td>
+                    <td style="text-align: center;"><button type="button" class="btn-delete-item" onclick="deleteAdvance(${index})">Delete</button></td>
                 </tr>
             `;
         });
     }
 
-    function deleteAdvanceEntry(index) {
+    function deleteAdvance(index) {
         let savedAdvances = JSON.parse(localStorage.getItem('savedAdvances')) || [];
         savedAdvances.splice(index, 1);
         localStorage.setItem('savedAdvances', JSON.stringify(savedAdvances));
@@ -783,248 +825,174 @@
     }
 
     function autoFetchAdvance() {
-        if (docMode !== 'bill') return;
-        const partyName = document.getElementById('partyName').value.trim().toLowerCase();
+        const party = document.getElementById('partyName').value.trim().toLowerCase();
         let savedAdvances = JSON.parse(localStorage.getItem('savedAdvances')) || [];
-        
-        advancePayments = savedAdvances.filter(adv => adv.party.toLowerCase() === partyName);
-        totalAdvance = advancePayments.reduce((sum, item) => sum + item.amount, 0);
+        totalAdvance = 0;
+        advancePayments = [];
+
+        savedAdvances.forEach(adv => {
+            if (adv.party.toLowerCase() === party) {
+                totalAdvance += adv.amount;
+                advancePayments.push(adv);
+            }
+        });
 
         document.getElementById('totalAdvancePaid').innerText = totalAdvance.toFixed(2);
-        document.getElementById('remainingBalance').innerText = (grandTotal - totalAdvance).toFixed(2);
+        calculateRemainingBalance();
     }
 
     function updateTable() {
         const tbody = document.querySelector('#itemsTable tbody');
-        const headerRow = document.getElementById('tableHeaderRow');
         tbody.innerHTML = '';
         grandTotal = 0;
-
-        headerRow.innerHTML = docMode === 'bill' 
-            ? `<th>Item Description</th><th>Price</th><th>Qty</th><th>Total</th><th style="text-align: center;">Action</th>`
-            : `<th>Item Description</th><th>Price</th><th>Qty</th><th style="text-align: center;">Action</th>`;
 
         currentItems.forEach((item, index) => {
             grandTotal += item.total;
             tbody.innerHTML += `
                 <tr>
-                    <td>${escapeHtml(item.name)}</td>
-                    <td>₹${item.price}</td>
-                    <td>${item.qty}</td>
-                    ${docMode === 'bill' ? `<td>₹${item.total.toFixed(2)}</td>` : ''}
-                    <td style="text-align: center;">
-                        <button type="button" class="btn-delete-item" onclick="removeItem(${index})">Delete</button>
-                    </td>
+                    <td style="text-align: center; font-weight: 700;">${index + 1}</td>
+                    <td style="text-align: center;">${item.name}</td>
+                    <td style="text-align: center;">₹${item.price.toFixed(2)}</td>
+                    <td style="text-align: center;">${item.qty}</td>
+                    <td style="text-align: center;">₹${item.total.toFixed(2)}</td>
+                    <td style="text-align: center;"><button type="button" class="btn-delete-item" onclick="removeItem(${index})">X</button></td>
                 </tr>
             `;
         });
 
         document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
-        autoFetchAdvance();
+        calculateRemainingBalance();
     }
 
-    function populatePrintableHTML(bill) {
-        const docType = bill.docMode === 'bill' ? 'INVOICE' : 'QUOTATION';
-        const noLabel = bill.docMode === 'bill' ? 'Bill No' : 'Quotation No';
-
-        document.getElementById('printDocType').innerText = docType;
-        document.getElementById('printNoLabel').innerText = noLabel;
-        document.getElementById('printBillNo').innerText = bill.billNo;
-        document.getElementById('printBillDate').innerText = bill.billDate;
-        document.getElementById('printPartyName').innerText = bill.partyName;
-        
-        const printTbody = document.getElementById('printItemsList');
-        const printTableHeader = document.getElementById('printTableHeader');
-        printTbody.innerHTML = '';
-
-        if (bill.docMode === 'bill') {
-            document.getElementById('printSummaryBox').style.display = 'block';
-            document.getElementById('printGrandTotal').innerText = bill.total.toFixed(2);
-            document.getElementById('printTotalAdvance').innerText = (bill.totalAdvance || 0).toFixed(2);
-            document.getElementById('printBalanceDue').innerText = (bill.remainingBalance || 0).toFixed(2);
-
-            printTableHeader.innerHTML = `<th style="padding: 6px;">Item Description</th><th style="padding: 6px;">Price</th><th style="padding: 6px;">Qty</th><th style="padding: 6px;">Total</th>`;
-            bill.items.forEach(item => {
-                printTbody.innerHTML += `<tr><td style="padding: 6px;">${escapeHtml(item.name)}</td><td style="padding: 6px;">₹${item.price}</td><td style="padding: 6px;">${item.qty}</td><td style="padding: 6px;">₹${item.total.toFixed(2)}</td></tr>`;
-            });
-
-            const advPrintTbody = document.getElementById('printAdvanceList');
-            advPrintTbody.innerHTML = '';
-            if (bill.advancePayments && bill.advancePayments.length > 0) {
-                document.getElementById('printAdvanceContainer').style.display = 'block';
-                bill.advancePayments.forEach(adv => {
-                    advPrintTbody.innerHTML += `<tr><td style="padding: 6px;">${adv.date}</td><td style="padding: 6px;">${adv.method}</td><td style="padding: 6px;">₹${adv.amount.toFixed(2)}</td></tr>`;
-                });
-            } else {
-                document.getElementById('printAdvanceContainer').style.display = 'none';
-            }
-
-            if (bill.qrImage) {
-                document.getElementById('uploadedQrPreview').src = bill.qrImage;
-                document.getElementById('qrContainer').style.display = 'flex';
-            } else {
-                document.getElementById('qrContainer').style.display = 'none';
-            }
-        } else {
-            document.getElementById('printSummaryBox').style.display = 'none';
-            document.getElementById('printAdvanceContainer').style.display = 'none';
-            document.getElementById('qrContainer').style.display = 'none';
-            printTableHeader.innerHTML = `<th style="padding: 6px;">Item Description</th><th style="padding: 6px;">Price</th><th style="padding: 6px;">Qty</th>`;
-            bill.items.forEach(item => {
-                printTbody.innerHTML += `<tr><td style="padding: 6px;">${escapeHtml(item.name)}</td><td style="padding: 6px;">₹${item.price}</td><td style="padding: 6px;">${item.qty}</td></tr>`;
-            });
-        }
-    }
-
-    function saveBillToStorage() {
-        const partyName = document.getElementById('partyName').value.trim();
-        if (!partyName || currentItems.length === 0) {
-            return null;
-        }
-
-        const newBill = {
-            docMode,
-            billNo: document.getElementById('billNo').value,
-            billDate: document.getElementById('billDate').value,
-            partyName,
-            qrImage: savedQrBase64,
-            items: [...currentItems],
-            advancePayments: [...advancePayments],
-            total: docMode === 'bill' ? grandTotal : null,
-            totalAdvance: docMode === 'bill' ? totalAdvance : null,
-            remainingBalance: docMode === 'bill' ? (grandTotal - totalAdvance) : null
-        };
-
-        let savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
-        savedBills.push(newBill);
-        localStorage.setItem('savedBills', JSON.stringify(savedBills));
-        renderHistory();
-        updateDashboardStats();
-        return newBill;
+    function calculateRemainingBalance() {
+        const remaining = grandTotal - totalAdvance;
+        document.getElementById('remainingBalance').innerText = remaining.toFixed(2);
     }
 
     function saveAndPrintInvoice() {
-        const partyName = document.getElementById('partyName').value.trim();
-        if (!partyName || currentItems.length === 0) {
-            alert("Please fill party name and add items.");
+        const party = document.getElementById('partyName').value.trim();
+        const billNo = document.getElementById('billNo').value;
+        const billDate = document.getElementById('billDate').value;
+
+        if (!party || currentItems.length === 0) {
+            alert("Please enter Party Name and add at least one item.");
             return;
         }
 
-        const currentBill = {
+        const billData = {
             docMode,
-            billNo: document.getElementById('billNo').value,
-            billDate: document.getElementById('billDate').value,
-            partyName,
-            qrImage: savedQrBase64,
+            billNo,
+            party,
+            billDate,
             items: currentItems,
-            advancePayments: advancePayments,
+            advancePayments: docMode === 'bill' ? advancePayments : [],
             total: grandTotal,
-            totalAdvance: totalAdvance,
-            remainingBalance: grandTotal - totalAdvance
+            totalAdvance: docMode === 'bill' ? totalAdvance : 0,
+            remainingBalance: docMode === 'bill' ? (grandTotal - totalAdvance) : grandTotal
         };
 
-        populatePrintableHTML(currentBill);
-        window.print();
-        saveBillToStorage();
-        resetForm();
-    }
+        let savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        savedBills.push(billData);
+        localStorage.setItem('savedBills', JSON.stringify(savedBills));
 
-    function generatePDF(bill) {
-        populatePrintableHTML(bill);
+        document.getElementById('printDocType').innerText = docMode === 'bill' ? 'INVOICE' : 'QUOTATION';
+        document.getElementById('printPartyName').innerText = party;
+        document.getElementById('printBillNo').innerText = billNo;
+        document.getElementById('printBillDate').innerText = billDate;
+        document.getElementById('printNoLabel').innerText = docMode === 'bill' ? 'Bill No' : 'Quotation No';
 
-        const element = document.getElementById('printableInvoice');
-        element.style.display = 'block';
-
-        const opt = {
-            margin:       [8, 8, 8, 8],
-            filename:     `${bill.billNo}_${bill.partyName}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-
-        html2pdf().set(opt).from(element).save().then(() => {
-            element.style.display = 'none';
+        const printTable = document.getElementById('printItemsList');
+        printTable.innerHTML = '';
+        currentItems.forEach((item, index) => {
+            printTable.innerHTML += `
+                <tr>
+                    <td style="padding: 6px; text-align: center;">${index + 1}</td>
+                    <td class="item-name-col" style="padding: 6px; text-align: left; padding-left: 12px;">${item.name}</td>
+                    <td class="price-val-col" style="padding: 6px; text-align: left; padding-left: 12px;">₹${item.price.toFixed(2)}</td>
+                    <td class="qty-val-col" style="padding: 6px; text-align: right; padding-right: 12px;">${item.qty}</td>
+                    <td class="total-val-col" style="padding: 6px; text-align: right; padding-right: 12px;">₹${item.total.toFixed(2)}</td>
+                </tr>
+            `;
         });
+
+        if (docMode === 'quotation') {
+            document.getElementById('printAdvanceContainer').style.display = 'none';
+            document.getElementById('printGrandTotal').parentElement.style.display = 'none';
+            document.getElementById('printAdvanceRow').style.display = 'none';
+            document.getElementById('printBalanceRow').style.display = 'none';
+            document.getElementById('printSummaryBox').style.display = 'none';
+        } else {
+            document.getElementById('printAdvanceContainer').style.display = 'block';
+            document.getElementById('printGrandTotal').parentElement.style.display = 'flex';
+            document.getElementById('printAdvanceRow').style.display = 'flex';
+            document.getElementById('printBalanceRow').style.display = 'flex';
+            document.getElementById('printSummaryBox').style.display = 'block';
+
+            document.getElementById('printGrandTotal').innerText = grandTotal.toFixed(2);
+            document.getElementById('printTotalAdvance').innerText = totalAdvance.toFixed(2);
+            document.getElementById('printBalanceDue').innerText = (grandTotal - totalAdvance).toFixed(2);
+            
+            const printAdvList = document.getElementById('printAdvanceList');
+            printAdvList.innerHTML = '';
+            advancePayments.forEach(adv => {
+                printAdvList.innerHTML += `
+                    <tr>
+                        <td style="padding: 6px; text-align: center;">${adv.date}</td>
+                        <td style="padding: 6px; text-align: center;">${adv.method}</td>
+                        <td style="padding: 6px; text-align: center;">₹${adv.amount.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('printAdvanceContainer').style.display = advancePayments.length > 0 ? 'block' : 'none';
+        }
+
+        if (docMode === 'bill' && savedQrBase64) {
+            document.getElementById('uploadedQrPreview').src = savedQrBase64;
+            document.getElementById('qrContainer').style.display = 'flex';
+        } else {
+            document.getElementById('qrContainer').style.display = 'none';
+        }
+
+        window.print();
+        resetForm();
+        updateDashboardStats();
     }
 
-    function exportCurrentToPDF() {
-        const partyName = document.getElementById('partyName').value.trim();
-        if (!partyName || currentItems.length === 0) {
-            alert("Please fill party name and add items.");
-            return;
-        }
-        const bill = saveBillToStorage();
-        if (bill) { 
-            generatePDF(bill); 
-            resetForm(); 
-        }
-    }
-
-    function exportCurrentToExcel() {
-        const bill = saveBillToStorage();
-        if (bill) {
-            const isBill = bill.docMode !== 'quotation';
-            const excelData = [
-                [isBill ? "INVOICE" : "QUOTATION"], ["Laxmi Electrical"], ["Kalpesh Patel"], ["Mo: 7984109659"], [],
-                ["To:", bill.partyName], [isBill ? "Bill No:" : "Quotation No:", bill.billNo], ["Date:", bill.billDate], []
-            ];
-
-            if (isBill) {
-                excelData.push(["Item Description", "Price (Rs.)", "Qty", "Total (Rs.)"]);
-                bill.items.forEach(item => excelData.push([item.name, item.price, item.qty, item.total]));
-                excelData.push([]);
-                
-                if (bill.advancePayments && bill.advancePayments.length > 0) {
-                    excelData.push(["Advance Payment History"]);
-                    excelData.push(["Date", "Method", "Amount Paid (Rs.)"]);
-                    bill.advancePayments.forEach(adv => excelData.push([adv.date, adv.method, adv.amount]));
-                    excelData.push([]);
-                }
-
-                excelData.push(["", "", "Total Work Amount:", bill.total]);
-                excelData.push(["", "", "Total Advance Paid:", bill.totalAdvance]);
-                excelData.push(["", "", "Remaining Balance:", bill.remainingBalance]);
-            } else {
-                excelData.push(["Item Description", "Price (Rs.)", "Qty"]);
-                bill.items.forEach(item => excelData.push([item.name, item.price, item.qty]));
-            }
-
-            const worksheet = XLSX.utils.aoa_to_sheet(excelData);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, isBill ? "Invoice" : "Quotation");
-            XLSX.writeFile(workbook, `${bill.billNo}_${bill.partyName}.xlsx`);
-            resetForm();
-        }
+    function resetForm() {
+        currentItems = [];
+        advancePayments = [];
+        totalAdvance = 0;
+        document.getElementById('partyName').value = '';
+        document.getElementById('itemSearch').value = '';
+        document.getElementById('itemPrice').value = '';
+        document.getElementById('itemQty').value = '1';
+        document.getElementById('billDate').valueAsDate = new Date();
+        updateTable();
+        generateBillNumber();
     }
 
     function renderHistory() {
-        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
         const historyList = document.getElementById('historyList');
+        if (!historyList) return;
         historyList.innerHTML = '';
+        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
 
-        savedBills.slice().reverse().forEach((bill, idx) => {
-            const actualIndex = savedBills.length - 1 - idx;
+        savedBills.slice().reverse().forEach((b, idx) => {
+            const actualIdx = savedBills.length - 1 - idx;
             historyList.innerHTML += `
                 <div class="history-item">
                     <div class="history-item-header">
-                        <span style="color:#0f172a;">${escapeHtml(bill.partyName)}</span>
-                        <span style="color:var(--primary); font-size:11px;">${bill.docMode.toUpperCase()} (${bill.billNo})</span>
+                        <span>${b.billNo} - ${b.party}</span>
+                        <span>₹${b.total ? b.total.toFixed(2) : '0.00'}</span>
                     </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;">Date: ${bill.billDate}</div>
-                    ${bill.total ? `<div style="font-size:12px; font-weight:700; color:#334155; margin-top:4px;">Total: ₹${bill.total.toFixed(2)} | Balance: ₹${bill.remainingBalance.toFixed(2)}</div>` : ''}
+                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Date: ${b.billDate} | Type: ${b.docMode.toUpperCase()}</div>
                     <div class="history-actions">
-                        <button class="btn-sm btn-pdf" onclick="exportSavedPDF(${actualIndex})">PDF</button>
-                        <button class="btn-sm btn-sm-delete" onclick="deleteBill(${actualIndex})">Delete</button>
+                        <button type="button" class="btn-sm" style="background:#e0e7ff; color:#3730a3;" onclick="reprintBill(${actualIdx})">Print / View</button>
+                        <button type="button" class="btn-sm btn-sm-delete" onclick="deleteBill(${actualIdx})">Delete</button>
                     </div>
                 </div>
             `;
         });
-    }
-
-    function exportSavedPDF(index) {
-        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
-        if (savedBills[index]) generatePDF(savedBills[index]);
     }
 
     function deleteBill(index) {
@@ -1032,34 +1000,135 @@
         savedBills.splice(index, 1);
         localStorage.setItem('savedBills', JSON.stringify(savedBills));
         renderHistory();
+        generateBillNumber();
         updateDashboardStats();
     }
 
+    function reprintBill(index) {
+        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        const b = savedBills[index];
+        if (!b) return;
+
+        document.getElementById('printDocType').innerText = b.docMode === 'bill' ? 'INVOICE' : 'QUOTATION';
+        document.getElementById('printPartyName').innerText = b.party;
+        document.getElementById('printBillNo').innerText = b.billNo;
+        document.getElementById('printBillDate').innerText = b.billDate;
+        document.getElementById('printNoLabel').innerText = b.docMode === 'bill' ? 'Bill No' : 'Quotation No';
+
+        const printTable = document.getElementById('printItemsList');
+        printTable.innerHTML = '';
+        b.items.forEach((item, index) => {
+            printTable.innerHTML += `
+                <tr>
+                    <td style="padding: 6px; text-align: center;">${index + 1}</td>
+                    <td class="item-name-col" style="padding: 6px; text-align: left; padding-left: 12px;">${item.name}</td>
+                    <td class="price-val-col" style="padding: 6px; text-align: left; padding-left: 12px;">₹${item.price.toFixed(2)}</td>
+                    <td class="qty-val-col" style="padding: 6px; text-align: right; padding-right: 12px;">${item.qty}</td>
+                    <td class="total-val-col" style="padding: 6px; text-align: right; padding-right: 12px;">₹${item.total.toFixed(2)}</td>
+                </tr>
+            `;
+        });
+
+        if (b.docMode === 'quotation') {
+            document.getElementById('printAdvanceContainer').style.display = 'none';
+            document.getElementById('printSummaryBox').style.display = 'none';
+        } else {
+            document.getElementById('printSummaryBox').style.display = 'block';
+            document.getElementById('printGrandTotal').innerText = (b.total || 0).toFixed(2);
+            document.getElementById('printTotalAdvance').innerText = (b.totalAdvance || 0).toFixed(2);
+            document.getElementById('printBalanceDue').innerText = (b.remainingBalance || 0).toFixed(2);
+            
+            const printAdvList = document.getElementById('printAdvanceList');
+            printAdvList.innerHTML = '';
+            if (b.advancePayments) {
+                b.advancePayments.forEach(adv => {
+                    printAdvList.innerHTML += `
+                        <tr>
+                            <td style="padding: 6px; text-align: center;">${adv.date}</td>
+                            <td style="padding: 6px; text-align: center;">${adv.method}</td>
+                            <td style="padding: 6px; text-align: center;">₹${adv.amount.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('printAdvanceContainer').style.display = b.advancePayments.length > 0 ? 'block' : 'none';
+            }
+        }
+
+        if (b.docMode === 'bill' && savedQrBase64) {
+            document.getElementById('uploadedQrPreview').src = savedQrBase64;
+            document.getElementById('qrContainer').style.display = 'flex';
+        } else {
+            document.getElementById('qrContainer').style.display = 'none';
+        }
+
+        window.print();
+    }
+
     function searchBills() {
-        const filter = document.getElementById('searchParty').value.toLowerCase();
+        const query = document.getElementById('searchParty').value.toLowerCase();
         const items = document.querySelectorAll('.history-item');
         items.forEach(item => {
-            item.style.display = item.innerText.toLowerCase().includes(filter) ? 'block' : 'none';
+            const text = item.innerText.toLowerCase();
+            item.style.display = text.includes(query) ? 'block' : 'none';
         });
     }
 
-    function resetForm() {
-        currentItems = [];
-        advancePayments = [];
-        totalAdvance = 0;
-        grandTotal = 0;
-        document.getElementById('partyName').value = '';
-        document.getElementById('itemSearch').value = '';
-        document.getElementById('itemPrice').value = '';
-        document.getElementById('itemQty').value = '1';
-        generateBillNumber();
-        updateTable();
+    function exportCurrentToPDF() {
+        const element = document.getElementById('printableInvoice');
+        
+        if (docMode === 'quotation') {
+            document.getElementById('printAdvanceContainer').style.display = 'none';
+            document.getElementById('printSummaryBox').style.display = 'none';
+            document.getElementById('qrContainer').style.display = 'none';
+        } else {
+            document.getElementById('printSummaryBox').style.display = 'block';
+            if (savedQrBase64) {
+                document.getElementById('uploadedQrPreview').src = savedQrBase64;
+                document.getElementById('qrContainer').style.display = 'flex';
+            }
+        }
+
+        element.style.display = 'block';
+        const opt = {
+            margin: [0.3, 0.3, 0.3, 0.3],
+            filename: document.getElementById('billNo').value + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+        html2pdf().from(element).set(opt).save().then(() => {
+            element.style.display = 'none';
+        });
     }
 
-    function escapeHtml(text) {
-        return text ? text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+    function exportCurrentToExcel() {
+        if (currentItems.length === 0) {
+            alert("No items in the list to export!");
+            return;
+        }
+        const ws_data = [
+            ["Laxmi Electrical ERP - Report"],
+            ["No:", document.getElementById('billNo').value],
+            ["Party Name:", document.getElementById('partyName').value],
+            ["Date:", document.getElementById('billDate').value],
+            [],
+            ["No.", "Item Description", "Price (₹)", "Quantity", "Total (₹)"]
+        ];
+
+        currentItems.forEach((item, index) => {
+            ws_data.push([index + 1, item.name, item.price, item.qty, item.total]);
+        });
+
+        if (docMode === 'bill') {
+            ws_data.push([], ["Grand Total:", "", "", "", grandTotal]);
+        }
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(ws_data);
+        XLSX.utils.book_append_sheet(wb, ws, "Report");
+        XLSX.writeFile(wb, (document.getElementById('billNo').value || "Report") + ".xlsx");
     }
 </script>
-
 </body>
 </html>
