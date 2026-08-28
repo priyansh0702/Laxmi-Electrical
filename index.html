@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Laxmi Electrical - Responsive ERP & Billing System</title>
 
-    <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
@@ -267,68 +265,10 @@
             margin: 0 auto;
             box-sizing: border-box;
         }
-
-        @media print {
-            html, body { 
-                background: white !important; 
-                margin: 0 !important; 
-                padding: 0 !important; 
-                min-height: auto !important; 
-                height: auto !important;
-            }
-            .no-print { display: none !important; }
-            
-            #printableInvoice { 
-                display: block !important; 
-                width: 100% !important; 
-                padding: 15px !important; 
-                margin: 0 !important;
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                box-sizing: border-box !important;
-            }
-            
-            @page {
-                size: A4;
-                margin: 0mm; 
-            }
-
-            /* બધી કૉલમ ડિફોલ્ટ સેન્ટર રહેશે */
-            #printableInvoice table th, 
-            #printableInvoice table td {
-                text-align: center !important;
-            }
-            
-            /* માત્ર Qty અને Total હેડર સેન્ટરમાં રહેશે */
-            #printableInvoice table th.qty-header,
-            #printableInvoice table th.total-header {
-                text-align: center !important;
-            }
-
-            /* આઇટમનું નામ અને પ્રાઇસ ડાબી બાજુ રહેશે */
-            #printableInvoice table td.item-name-col {
-                text-align: left !important;
-                padding-left: 12px !important;
-            }
-
-            #printableInvoice table td.price-val-col {
-                text-align: left !important;
-                padding-left: 12px !important;
-            }
-
-            /* ફ્ક્ત Qty અને Total ની યાદી જમણી બાજુ રહેશે */
-            #printableInvoice table td.qty-val-col,
-            #printableInvoice table td.total-val-col {
-                text-align: right !important;
-                padding-right: 12px !important;
-            }
-        }
     </style>
 </head>
 <body>
 
-<!-- Financial Year Filter Bar -->
 <div class="fy-filter-wrapper no-print">
     <label for="fySelect"><i class="ri-calendar-event-line"></i> Financial Year:</label>
     <select id="fySelect" onchange="updateDashboardStats()">
@@ -339,7 +279,6 @@
     </select>
 </div>
 
-<!-- Analytics Quick Dashboard -->
 <div class="stats-bar no-print">
     <div class="stat-card">
         <div class="stat-icon"><i class="ri-wallet-3-line"></i></div>
@@ -365,7 +304,6 @@
 </div>
 
 <div class="container no-print">
-    <!-- Main Left Column -->
     <div class="card">
         <div class="mode-tabs">
             <button type="button" class="tab-btn active" id="tabBill" onclick="setDocMode('bill')"><i class="ri-receipt-line"></i> Bill</button>
@@ -427,10 +365,10 @@
                     <thead>
                         <tr id="tableHeaderRow">
                             <th style="width: 50px; text-align: center; font-weight: 800;">No.</th>
-                            <th style="text-align: center; font-weight: 800;">Item Description</th>
-                            <th style="text-align: center; font-weight: 800;">Price</th>
-                            <th style="text-align: center; font-weight: 800;">Qty</th>
-                            <th style="text-align: center; font-weight: 800;">Total</th>
+                            <th style="text-align: left; font-weight: 800; padding-left: 12px;">Item Description</th>
+                            <th style="text-align: left; font-weight: 800; padding-left: 12px;">Price</th>
+                            <th style="text-align: right; font-weight: 800; padding-right: 12px;">Qty</th>
+                            <th style="text-align: right; font-weight: 800; padding-right: 12px;">Total</th>
                             <th style="text-align: center;">Action</th>
                         </tr>
                     </thead>
@@ -461,7 +399,6 @@
             <button type="button" class="btn btn-clear" onclick="resetForm()"><i class="ri-refresh-line"></i> Clear Form</button>
         </div>
 
-        <!-- Standalone Advance Block -->
         <div id="advanceSectionBlock" style="display: none; background: #fffbebf5; border: 1px solid #fcd34d; padding: 14px; border-radius: 12px;">
             <h4 style="margin-top: 0; color: #b45309;"><i class="ri-bank-card-line"></i> Advance Payment Entry</h4>
             <div class="form-group">
@@ -507,7 +444,6 @@
         </div>
     </div>
 
-    <!-- Right Sidebar History -->
     <div class="card">
         <div class="card-header">
             <h2><i class="ri-history-line"></i> Saved Ledger</h2>
@@ -519,7 +455,6 @@
     </div>
 </div>
 
-<!-- Print Preview Layout -->
 <div id="printableInvoice">
     <h3 style="text-align: center; font-weight: 800; margin-bottom: 16px; letter-spacing: 1px; color: #0f172a;" id="printDocType">INVOICE</h3>
     
@@ -541,10 +476,10 @@
         <thead>
             <tr style="background-color: #f8fafc; color: #475569; font-size: 12px;">
                 <th style="width: 40px; padding: 6px; text-align: center; font-weight: 800;">No.</th>
-                <th style="padding: 6px; text-align: center; font-weight: 800;">Item Description</th>
-                <th class="price-header" style="padding: 6px; text-align: center; font-weight: 800;">Price</th>
-                <th class="qty-header" style="padding: 6px; text-align: center; font-weight: 800;">Qty</th>
-                <th class="total-header" style="padding: 6px; text-align: center; font-weight: 800;">Total</th>
+                <th style="padding: 6px; text-align: left; font-weight: 800; padding-left: 12px;">Item Description</th>
+                <th style="padding: 6px; text-align: left; font-weight: 800; padding-left: 12px;">Price</th>
+                <th style="padding: 6px; text-align: right; font-weight: 800; padding-right: 12px;">Qty</th>
+                <th style="padding: 6px; text-align: right; font-weight: 800; padding-right: 12px;">Total</th>
             </tr>
         </thead>
         <tbody id="printItemsList" style="font-size: 12px;"></tbody>
@@ -851,10 +786,10 @@
             tbody.innerHTML += `
                 <tr>
                     <td style="text-align: center; font-weight: 700;">${index + 1}</td>
-                    <td style="text-align: center;">${item.name}</td>
-                    <td style="text-align: center;">₹${item.price.toFixed(2)}</td>
-                    <td style="text-align: center;">${item.qty}</td>
-                    <td style="text-align: center;">₹${item.total.toFixed(2)}</td>
+                    <td style="text-align: left; padding-left: 12px;">${item.name}</td>
+                    <td style="text-align: left; padding-left: 12px;">₹${item.price.toFixed(2)}</td>
+                    <td style="text-align: right; padding-right: 12px;">${item.qty}</td>
+                    <td style="text-align: right; padding-right: 12px;">₹${item.total.toFixed(2)}</td>
                     <td style="text-align: center;"><button type="button" class="btn-delete-item" onclick="removeItem(${index})">X</button></td>
                 </tr>
             `;
@@ -869,6 +804,7 @@
         document.getElementById('remainingBalance').innerText = remaining.toFixed(2);
     }
 
+    // મોબાઈલ અને લેપટોપ બંને માટે પરફેક્ટ પીડીએફ અને પ્રિન્ટ ડાઉનલોડ ફંક્શન
     function saveAndPrintInvoice() {
         const party = document.getElementById('partyName').value.trim();
         const billNo = document.getElementById('billNo').value;
@@ -895,120 +831,28 @@
         savedBills.push(billData);
         localStorage.setItem('savedBills', JSON.stringify(savedBills));
 
-        document.getElementById('printDocType').innerText = docMode === 'bill' ? 'INVOICE' : 'QUOTATION';
-        document.getElementById('printPartyName').innerText = party;
-        document.getElementById('printBillNo').innerText = billNo;
-        document.getElementById('printBillDate').innerText = billDate;
-        document.getElementById('printNoLabel').innerText = docMode === 'bill' ? 'Bill No' : 'Quotation No';
+        preparePrintContent(billData);
 
-        const printTable = document.getElementById('printItemsList');
-        printTable.innerHTML = '';
-        currentItems.forEach((item, index) => {
-            printTable.innerHTML += `
-                <tr>
-                    <td style="padding: 6px; text-align: center;">${index + 1}</td>
-                    <td class="item-name-col" style="padding: 6px; text-align: left; padding-left: 12px;">${item.name}</td>
-                    <td class="price-val-col" style="padding: 6px; text-align: left; padding-left: 12px;">₹${item.price.toFixed(2)}</td>
-                    <td class="qty-val-col" style="padding: 6px; text-align: right; padding-right: 12px;">${item.qty}</td>
-                    <td class="total-val-col" style="padding: 6px; text-align: right; padding-right: 12px;">₹${item.total.toFixed(2)}</td>
-                </tr>
-            `;
-        });
+        // મોબાઈલ ফ্রেন্ডલી html2pdf નો ઉપયોગ જેથી બ્લેન્ક પેજ ન આવે
+        const element = document.getElementById('printableInvoice');
+        element.style.display = 'block';
 
-        if (docMode === 'quotation') {
-            document.getElementById('printAdvanceContainer').style.display = 'none';
-            document.getElementById('printGrandTotal').parentElement.style.display = 'none';
-            document.getElementById('printAdvanceRow').style.display = 'none';
-            document.getElementById('printBalanceRow').style.display = 'none';
-            document.getElementById('printSummaryBox').style.display = 'none';
-        } else {
-            document.getElementById('printAdvanceContainer').style.display = 'block';
-            document.getElementById('printGrandTotal').parentElement.style.display = 'flex';
-            document.getElementById('printAdvanceRow').style.display = 'flex';
-            document.getElementById('printBalanceRow').style.display = 'flex';
-            document.getElementById('printSummaryBox').style.display = 'block';
+        const opt = {
+            margin: [0.3, 0.3, 0.3, 0.3],
+            filename: billNo + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
 
-            document.getElementById('printGrandTotal').innerText = grandTotal.toFixed(2);
-            document.getElementById('printTotalAdvance').innerText = totalAdvance.toFixed(2);
-            document.getElementById('printBalanceDue').innerText = (grandTotal - totalAdvance).toFixed(2);
-            
-            const printAdvList = document.getElementById('printAdvanceList');
-            printAdvList.innerHTML = '';
-            advancePayments.forEach(adv => {
-                printAdvList.innerHTML += `
-                    <tr>
-                        <td style="padding: 6px; text-align: center;">${adv.date}</td>
-                        <td style="padding: 6px; text-align: center;">${adv.method}</td>
-                        <td style="padding: 6px; text-align: center;">₹${adv.amount.toFixed(2)}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById('printAdvanceContainer').style.display = advancePayments.length > 0 ? 'block' : 'none';
-        }
-
-        if (docMode === 'bill' && savedQrBase64) {
-            document.getElementById('uploadedQrPreview').src = savedQrBase64;
-            document.getElementById('qrContainer').style.display = 'flex';
-        } else {
-            document.getElementById('qrContainer').style.display = 'none';
-        }
-
-        window.print();
-        resetForm();
-        updateDashboardStats();
-    }
-
-    function resetForm() {
-        currentItems = [];
-        advancePayments = [];
-        totalAdvance = 0;
-        document.getElementById('partyName').value = '';
-        document.getElementById('itemSearch').value = '';
-        document.getElementById('itemPrice').value = '';
-        document.getElementById('itemQty').value = '1';
-        document.getElementById('billDate').valueAsDate = new Date();
-        updateTable();
-        generateBillNumber();
-    }
-
-    function renderHistory() {
-        const historyList = document.getElementById('historyList');
-        if (!historyList) return;
-        historyList.innerHTML = '';
-        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
-
-        savedBills.slice().reverse().forEach((b, idx) => {
-            const actualIdx = savedBills.length - 1 - idx;
-            historyList.innerHTML += `
-                <div class="history-item">
-                    <div class="history-item-header">
-                        <span>${b.billNo} - ${b.party}</span>
-                        <span>₹${b.total ? b.total.toFixed(2) : '0.00'}</span>
-                    </div>
-                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Date: ${b.billDate} | Type: ${b.docMode.toUpperCase()}</div>
-                    <div class="history-actions">
-                        <button type="button" class="btn-sm" style="background:#e0e7ff; color:#3730a3;" onclick="reprintBill(${actualIdx})">Print / View</button>
-                        <button type="button" class="btn-sm btn-sm-delete" onclick="deleteBill(${actualIdx})">Delete</button>
-                    </div>
-                </div>
-            `;
+        html2pdf().from(element).set(opt).save().then(() => {
+            element.style.display = 'none';
+            resetForm();
+            updateDashboardStats();
         });
     }
 
-    function deleteBill(index) {
-        let savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
-        savedBills.splice(index, 1);
-        localStorage.setItem('savedBills', JSON.stringify(savedBills));
-        renderHistory();
-        generateBillNumber();
-        updateDashboardStats();
-    }
-
-    function reprintBill(index) {
-        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
-        const b = savedBills[index];
-        if (!b) return;
-
+    function preparePrintContent(b) {
         document.getElementById('printDocType').innerText = b.docMode === 'bill' ? 'INVOICE' : 'QUOTATION';
         document.getElementById('printPartyName').innerText = b.party;
         document.getElementById('printBillNo').innerText = b.billNo;
@@ -1021,10 +865,10 @@
             printTable.innerHTML += `
                 <tr>
                     <td style="padding: 6px; text-align: center;">${index + 1}</td>
-                    <td class="item-name-col" style="padding: 6px; text-align: left; padding-left: 12px;">${item.name}</td>
-                    <td class="price-val-col" style="padding: 6px; text-align: left; padding-left: 12px;">₹${item.price.toFixed(2)}</td>
-                    <td class="qty-val-col" style="padding: 6px; text-align: right; padding-right: 12px;">${item.qty}</td>
-                    <td class="total-val-col" style="padding: 6px; text-align: right; padding-right: 12px;">₹${item.total.toFixed(2)}</td>
+                    <td style="padding: 6px; text-align: left; padding-left: 12px;">${item.name}</td>
+                    <td style="padding: 6px; text-align: left; padding-left: 12px;">₹${item.price.toFixed(2)}</td>
+                    <td style="padding: 6px; text-align: right; padding-right: 12px;">${item.qty}</td>
+                    <td style="padding: 6px; text-align: right; padding-right: 12px;">₹${item.total.toFixed(2)}</td>
                 </tr>
             `;
         });
@@ -1060,8 +904,75 @@
         } else {
             document.getElementById('qrContainer').style.display = 'none';
         }
+    }
 
-        window.print();
+    function resetForm() {
+        currentItems = [];
+        advancePayments = [];
+        totalAdvance = 0;
+        document.getElementById('partyName').value = '';
+        document.getElementById('itemSearch').value = '';
+        document.getElementById('itemPrice').value = '';
+        document.getElementById('itemQty').value = '1';
+        document.getElementById('billDate').valueAsDate = new Date();
+        updateTable();
+        generateBillNumber();
+    }
+
+    function renderHistory() {
+        const historyList = document.getElementById('historyList');
+        if (!historyList) return;
+        historyList.innerHTML = '';
+        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+
+        savedBills.slice().reverse().forEach((b, idx) => {
+            const actualIdx = savedBills.length - 1 - idx;
+            historyList.innerHTML += `
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <span>${b.billNo} - ${b.party}</span>
+                        <span>₹${b.total ? b.total.toFixed(2) : '0.00'}</span>
+                    </div>
+                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Date: ${b.billDate} | Type: ${b.docMode.toUpperCase()}</div>
+                    <div class="history-actions">
+                        <button type="button" class="btn-sm" style="background:#e0e7ff; color:#3730a3;" onclick="reprintBill(${actualIdx})">Download PDF</button>
+                        <button type="button" class="btn-sm btn-sm-delete" onclick="deleteBill(${actualIdx})">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function deleteBill(index) {
+        let savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        savedBills.splice(index, 1);
+        localStorage.setItem('savedBills', JSON.stringify(savedBills));
+        renderHistory();
+        generateBillNumber();
+        updateDashboardStats();
+    }
+
+    function reprintBill(index) {
+        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        const b = savedBills[index];
+        if (!b) return;
+
+        preparePrintContent(b);
+
+        const element = document.getElementById('printableInvoice');
+        element.style.display = 'block';
+
+        const opt = {
+            margin: [0.3, 0.3, 0.3, 0.3],
+            filename: b.billNo + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().from(element).set(opt).save().then(() => {
+            element.style.display = 'none';
+        });
     }
 
     function searchBills() {
@@ -1074,29 +985,36 @@
     }
 
     function exportCurrentToPDF() {
-        const element = document.getElementById('printableInvoice');
-        
-        if (docMode === 'quotation') {
-            document.getElementById('printAdvanceContainer').style.display = 'none';
-            document.getElementById('printSummaryBox').style.display = 'none';
-            document.getElementById('qrContainer').style.display = 'none';
-        } else {
-            document.getElementById('printSummaryBox').style.display = 'block';
-            if (savedQrBase64) {
-                document.getElementById('uploadedQrPreview').src = savedQrBase64;
-                document.getElementById('qrContainer').style.display = 'flex';
-            }
+        if (currentItems.length === 0) {
+            alert("Please add items first!");
+            return;
         }
+        
+        const tempBill = {
+            docMode,
+            billNo: document.getElementById('billNo').value,
+            party: document.getElementById('partyName').value || 'Customer',
+            billDate: document.getElementById('billDate').value,
+            items: currentItems,
+            advancePayments,
+            total: grandTotal,
+            totalAdvance,
+            remainingBalance: grandTotal - totalAdvance
+        };
 
+        preparePrintContent(tempBill);
+
+        const element = document.getElementById('printableInvoice');
         element.style.display = 'block';
+
         const opt = {
             margin: [0.3, 0.3, 0.3, 0.3],
-            filename: document.getElementById('billNo').value + '.pdf',
+            filename: tempBill.billNo + '.pdf',
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
+
         html2pdf().from(element).set(opt).save().then(() => {
             element.style.display = 'none';
         });
