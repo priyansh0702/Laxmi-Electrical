@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laxmi Electrical - Responsive ERP & Billing System</title>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-bg: rgba(255, 255, 255, 0.98);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            transition: all 0.2s ease-in-out;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body { 
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+            margin: 0; 
+            padding: 12px; 
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* Top Stats Bar & FY Filter - Fully Mobile Grid */
+        .fy-filter-wrapper {
+            max-width: 1280px;
+            margin: 0 auto 10px auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fy-filter-wrapper label {
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .fy-filter-wrapper select {
+            width: auto;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 700;
+            border-radius: 8px;
+            outline: none;
+        }
+        .fy-filter-wrapper select option {
+            background: #0f172a;
+            color: #fff;
+        }
+
+        .stats-bar {
+            max-width: 1280px;
+            margin: 0 auto 16px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 14px 16px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .stat-info h5 { margin: 0; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-info p { margin: 2px 0 0 0; font-size: 18px; font-weight: 700; }
+        
+        .container { 
+            max-width: 1280px; 
+            margin: 0 auto; 
+            display: grid; 
+            grid-template-columns: 1.2fr 0.8fr; 
+            gap: 16px; 
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(20px);
+            padding: 20px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-header {
+            margin-bottom: 16px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+        
+        h2 { 
+            margin: 0; 
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 20px; 
+            font-weight: 800; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Segmented Responsive Navigation Tabs */
+        .mode-tabs { 
+            display: flex; 
+            gap: 4px; 
+            margin-bottom: 16px; 
+            background: #f1f5f9; 
+            padding: 4px; 
+            border-radius: 12px; 
+            overflow-x: auto;
+        }
+        
+        .tab-btn {
+            flex: 1; padding: 10px 8px; border: none; background: transparent;
+            color: var(--text-muted); font-weight: 700; font-size: 12.5px; border-radius: 8px;
+            cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;
+            white-space: nowrap;
+        }
+        
+        .tab-btn.active { 
+            background: #ffffff; 
+            color: var(--primary); 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group { margin-bottom: 14px; }
+        label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 12.5px; color: #475569; }
+        
+        input, select { 
+            width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); 
+            border-radius: 10px; font-size: 14px; outline: none; background: #fff;
+            color: var(--text-dark); font-weight: 500;
+        }
+        
+        input:focus, select:focus { 
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12); 
+        }
+        
+        /* Flex row adapting on small screens */
+        .flex-row { display: flex; gap: 10px; }
+        .flex-row div { flex: 1; }
+        
+        /* Table Controls for Mobile Horizontal Scroll */
+        .table-responsive {
+            width: 100%; 
+            overflow-x: auto; 
+            margin-top: 14px;
+            border-radius: 10px; 
+            border: 1px solid var(--border-color);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table { width: 100%; border-collapse: collapse; min-width: 300px; }
+        th, td { border-bottom: 1px solid #f1f5f9; padding: 10px 12px; text-align: left; font-size: 13px; }
+        th { background: #f8fafc; color: #475569; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Interactive Touch Buttons */
+        .btn { 
+            padding: 12px; border: none; border-radius: 10px; cursor: pointer; 
+            font-weight: 700; width: 100%; margin-top: 10px; font-size: 13.5px;
+            display: inline-flex; justify-content: center; align-items: center; gap: 6px;
+        }
+        
+        .btn:active { transform: scale(0.98); }
+
+        .btn-add { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .btn-adv-add { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .btn-save { background: linear-gradient(135deg, #4f46e5, #3730a3); color: white; }
+        .btn-pdf { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .btn-excel { background: linear-gradient(135deg, #059669, #047857); color: white; }
+        .btn-clear { background: #e2e8f0; color: #475569; }
+        
+        .btn-delete-item { 
+            background: #fee2e2; color: #dc2626; border: none; 
+            padding: 4px 8px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 11px;
+        }
+
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        
+        /* Dynamic Summary Box */
+        .summary-box { 
+            margin-top: 16px; 
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%); 
+            padding: 14px; 
+            border-radius: 12px; 
+            border: 1px solid #c7d2fe;
+        }
+        .summary-row { display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px; font-weight: 600; color: #3730a3; }
+        .summary-row.final { font-size: 16px; font-weight: 800; color: #1e1b4b; border-top: 2px dashed #a5b4fc; padding-top: 8px; margin-bottom: 0; }
+        
+        /* History Section */
+        .history-item { 
+            border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; margin-bottom: 10px; 
+            background: #ffffff; position: relative; overflow: hidden;
+        }
+        .history-item::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+        }
+        .history-item-header { display: flex; justify-content: space-between; font-weight: 700; font-size: 13.5px; }
+        .history-actions { display: flex; gap: 6px; margin-top: 10px; }
+        .btn-sm { padding: 6px 8px; border: none; border-radius: 6px; cursor: pointer; font-size: 11px; flex: 1; font-weight: 700; }
+        .btn-sm-delete { background-color: #fee2e2; color: #dc2626; }
+
+        .qr-footer-container { display: flex; justify-content: flex-end; margin-top: 16px; }
+        .qr-box { text-align: center; border: 2px dashed #a5b4fc; padding: 6px; border-radius: 8px; width: 100px; background: #fff; }
+        #uploadedQrPreview { width: 85px; height: 85px; object-fit: contain; margin: 0 auto; display: block; }
+
+        /* Mobile Layout Media Queries */
+        @media (max-width: 900px) {
+            body { padding: 8px; }
+            .container { grid-template-columns: 1fr; }
+            .card { padding: 16px; }
+            .action-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .flex-row { flex-direction: column; gap: 8px; }
+            .stat-card { padding: 10px 12px; }
+            .tab-btn { font-size: 11px; padding: 8px 4px; }
+        }
+
+        /* Printable Area Formatting */
+        #printableInvoice { 
+            display: none; 
+            background: #fff;
+            padding: 20px;
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        @media print {
+            body { background: white !important; margin: 0 !important; padding: 0 !important; }
+            .no-print { display: none !important; }
+            #printableInvoice { display: block !important; width: 100% !important; padding: 0 !important; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Financial Year Filter Bar -->
+<div class="fy-filter-wrapper no-print">
+    <label for="fySelect"><i class="ri-calendar-event-line"></i> Financial Year:</label>
+    <select id="fySelect" onchange="updateDashboardStats()">
+        <option value="2024-25">2024-25</option>
+        <option value="2025-26">2025-26</option>
+        <option value="2026-27">2026-27</option>
+        <option value="2027-28">2027-28</option>
+    </select>
+</div>
+
+<!-- Analytics Quick Dashboard -->
+<div class="stats-bar no-print">
+    <div class="stat-card">
+        <div class="stat-icon"><i class="ri-wallet-3-line"></i></div>
+        <div class="stat-info">
+            <h5>Total Revenue (<span class="selected-fy-label"></span>)</h5>
+            <p>₹ <span id="statRevenue">0.00</span></p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #047857);"><i class="ri-file-list-3-line"></i></div>
+        <div class="stat-info">
+            <h5>Total Bills (<span class="selected-fy-label"></span>)</h5>
+            <p><span id="statTotalBills">0</span> Invoices</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="ri-time-line"></i></div>
+        <div class="stat-info">
+            <h5>Pending Balance (<span class="selected-fy-label"></span>)</h5>
+            <p>₹ <span id="statPending">0.00</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="container no-print">
+    <!-- Main Left Column -->
+    <div class="card">
+        <div class="mode-tabs">
+            <button type="button" class="tab-btn active" id="tabBill" onclick="setDocMode('bill')"><i class="ri-receipt-line"></i> Bill</button>
+            <button type="button" class="tab-btn" id="tabQuotation" onclick="setDocMode('quotation')"><i class="ri-file-paper-line"></i> Quotation</button>
+            <button type="button" class="tab-btn" id="tabAdvance" onclick="setDocMode('advance')"><i class="ri-coin-line"></i> Advance</button>
+        </div>
+
+        <div class="card-header">
+            <h2 id="formTitle"><i class="ri-shield-flash-line"></i> Create Invoice</h2>
+        </div>
+        
+        <div id="mainFormBlock">
+            <div class="flex-row form-group">
+                <div>
+                    <label id="noLabel">Bill No:</label>
+                    <input type="text" id="billNo" readonly style="background-color: #f1f5f9; color: #64748b; font-weight:700;">
+                </div>
+                <div>
+                    <label>Date:</label>
+                    <input type="date" id="billDate">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Party / Customer Name:</label>
+                <input type="text" id="partyName" placeholder="Enter party name..." oninput="autoFetchAdvance()">
+            </div>
+
+            <div class="form-group">
+                <label>Upload Payment QR Code:</label>
+                <input type="file" id="qrFileInput" accept="image/*" onchange="handleQRUpload(event)">
+                <small id="qrUploadStatus" style="color: #10b981; display: none; font-weight: 700; margin-top: 4px;">✔ Custom QR Configured</small>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 18px 0;">
+
+            <h4 style="color: var(--primary); margin: 0 0 10px 0;"><i class="ri-tools-line"></i> Select Work Item</h4>
+            <div class="form-group">
+                <label>Search Item Name:</label>
+                <input type="text" id="itemSearch" list="itemListOptions" placeholder="Type item name..." oninput="autoFillPrice()">
+                <datalist id="itemListOptions"></datalist>
+            </div>
+            
+            <div class="flex-row form-group">
+                <div>
+                    <label>Price (₹):</label>
+                    <input type="number" id="itemPrice" placeholder="0">
+                </div>
+                <div>
+                    <label>Qty / Ft / Mtr:</label>
+                    <input type="number" id="itemQty" value="1" min="1">
+                </div>
+            </div>
+            
+            <button type="button" class="btn btn-add" onclick="addItem()"><i class="ri-add-circle-line"></i> Add Item to List</button>
+
+            <div class="table-responsive">
+                <table id="itemsTable">
+                    <thead>
+                        <tr id="tableHeaderRow">
+                            <th>Item Description</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                            <th style="text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="summary-box" id="grandTotalContainer">
+                <div class="summary-row">
+                    <span>Total Amount:</span>
+                    <span>₹ <span id="grandTotal">0.00</span></span>
+                </div>
+                <div class="summary-row" style="color: #dc2626;">
+                    <span>Total Advance Paid:</span>
+                    <span>- ₹ <span id="totalAdvancePaid">0.00</span></span>
+                </div>
+                <div class="summary-row final">
+                    <span>Remaining Balance:</span>
+                    <span>₹ <span id="remainingBalance">0.00</span></span>
+                </div>
+            </div>
+
+            <div class="action-grid">
+                <button type="button" class="btn btn-save" id="printBtnText" onclick="saveAndPrintInvoice()"><i class="ri-printer-line"></i> Print Document</button>
+                <button type="button" class="btn btn-pdf" onclick="exportCurrentToPDF()"><i class="ri-file-pdf-line"></i> Export PDF</button>
+            </div>
+            <button type="button" class="btn btn-excel" onclick="exportCurrentToExcel()"><i class="ri-file-excel-line"></i> Export Excel Worksheet</button>
+            <button type="button" class="btn btn-clear" onclick="resetForm()"><i class="ri-refresh-line"></i> Clear Form</button>
+        </div>
+
+        <!-- Standalone Advance Block -->
+        <div id="advanceSectionBlock" style="display: none; background: #fffbebf5; border: 1px solid #fcd34d; padding: 14px; border-radius: 12px;">
+            <h4 style="margin-top: 0; color: #b45309;"><i class="ri-bank-card-line"></i> Advance Payment Entry</h4>
+            <div class="form-group">
+                <label>Party / Customer Name:</label>
+                <input type="text" id="advPartyName" placeholder="Enter Customer Name">
+            </div>
+            <div class="flex-row form-group">
+                <div>
+                    <label>Advance Amount (₹):</label>
+                    <input type="number" id="advAmount" placeholder="Amount">
+                </div>
+                <div>
+                    <label>Date:</label>
+                    <input type="date" id="advDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Payment Method:</label>
+                <select id="advMethod">
+                    <option value="Cash">Cash</option>
+                    <option value="Online / UPI">Online / UPI</option>
+                    <option value="Cheque">Cheque</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-adv-add" onclick="saveStandaloneAdvance()"><i class="ri-save-line"></i> Record Advance Entry</button>
+
+            <h4 style="margin-top: 18px; color: #475569;">Saved Advance Records</h4>
+            <div class="table-responsive">
+                <table id="advanceTable">
+                    <thead>
+                        <tr>
+                            <th>Party Name</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th style="text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="advanceTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar History -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="ri-history-line"></i> Saved Ledger</h2>
+        </div>
+        <div class="form-group">
+            <input type="text" id="searchParty" placeholder="🔍 Search records..." onkeyup="searchBills()">
+        </div>
+        <div id="historyList"></div>
+    </div>
+</div>
+
+<!-- Print Preview Layout -->
+<div id="printableInvoice">
+    <h3 style="text-align: center; font-weight: 800; margin-bottom: 16px; letter-spacing: 1px; color: #0f172a;" id="printDocType">INVOICE</h3>
+    
+    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+        <div>
+            <h3 style="margin: 0; color: #4f46e5; font-size: 20px; font-weight: 800;">Laxmi Electrical</h3>
+            <p style="margin: 2px 0 0 0; font-weight: 700; color: #334155;">Kalpesh Patel</p>
+            <p style="margin: 2px 0 0 0; color: #64748b; font-size: 12px;">Mo: 7984109659</p>
+        </div>
+        <div style="text-align: right; color: #334155;">
+            <p style="margin: 0; font-size: 12px;"><strong>To:</strong> <span id="printPartyName"></span></p>
+            <p style="margin: 2px 0; font-size: 12px;"><strong><span id="printNoLabel">Bill No</span>:</strong> <span id="printBillNo"></span></p>
+            <p style="margin: 0; font-size: 12px;"><strong>Date:</strong> <span id="printBillDate"></span></p>
+        </div>
+    </div>
+
+    <h4 style="margin-bottom: 6px; color: #0f172a; font-size: 13px;">Work Details</h4>
+    <table style="width:100%; border-collapse: collapse; margin-top: 4px;" border="1" borderColor="#e2e8f0">
+        <thead>
+            <tr id="printTableHeader" style="background-color: #f8fafc; color: #475569; font-size: 11px;">
+                <th style="padding: 6px;">Item Description</th>
+                <th style="padding: 6px;">Price</th>
+                <th style="padding: 6px;">Qty</th>
+                <th style="padding: 6px;">Total</th>
+            </tr>
+        </thead>
+        <tbody id="printItemsList" style="font-size: 12px;"></tbody>
+    </table>
+
+    <div id="printAdvanceContainer">
+        <h4 style="margin: 12px 0 4px 0; color: #b45309; font-size: 13px;">Advance Payments Received</h4>
+        <table style="width:100%; border-collapse: collapse; margin-top: 4px;" border="1" borderColor="#e2e8f0">
+            <thead>
+                <tr style="background-color: #f8fafc; color: #475569; font-size: 11px;">
+                    <th style="padding: 6px;">Date</th>
+                    <th style="padding: 6px;">Payment Method</th>
+                    <th style="padding: 6px;">Amount Paid</th>
+                </tr>
+            </thead>
+            <tbody id="printAdvanceList" style="font-size: 12px;"></tbody>
+        </table>
+    </div>
+
+    <div style="width: 220px; margin-left: auto; margin-top: 12px; font-size: 12px;" id="printSummaryBox">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; color: #475569;">
+            <span>Total Bill Amount:</span>
+            <span>₹<span id="printGrandTotal">0.00</span></span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:#dc2626;">
+            <span>Total Advance Paid:</span>
+            <span>- ₹<span id="printTotalAdvance">0.00</span></span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-weight:800; border-top:1.5px solid #1e293b; padding-top:4px; color:#4f46e5; font-size: 14px;">
+            <span>Balance Due:</span>
+            <span>₹<span id="printBalanceDue">0.00</span></span>
+        </div>
+    </div>
+
+    <div class="qr-footer-container" id="qrContainer">
+        <div class="qr-box">
+            <img id="uploadedQrPreview" src="" alt="Scan to Pay">
+            <span style="font-size: 9px; font-weight: 700; color: #64748b;">Scan to Pay</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const itemsList = [
+        { name: "Light point", price: 200 }, 
+        { name: "Fan point", price: 200 },
+        { name: "Two way point", price: 200 }, 
+        { name: "Ac (3-Light point)", price: 600 },
+        { name: "5A Plug", price: 200 }, 
+        { name: "15A Plug (2-Light point))", price: 400 },
+        { name: "Profile point (2-Light point)", price: 400 }, 
+        { name: "Wall point", price: 200 },
+        { name: "TPN (Four Poll)", price: 800 }, 
+        { name: "RCCB (Four Poll)", price: 800 },
+        { name: "S.P", price: 200 }, 
+        { name: "Light fitting (POP)", price: 50 },
+        { name: "Light fitting (Surface)", price: 100 }, 
+        { name: "Fasner fitting", price: 150 },
+        { name: "Hanging", price: 200 }, 
+        { name: "Zummar mandir"},
+        { name: "Zummar living room"}, 
+        { name: "Zummar dinning"},
+        { name: "Wall light fiting", price: 100 }, 
+        { name: "Wardrobe sensor fitting", price: 200 },
+        { name: "Aexos fan", price: 100 }, 
+        { name: "Profile Light fitting (Mtr)", price: 150 },
+        { name: "Cat-6 (Ft)", price: 12 }, 
+        { name: "Rop light (Ft)", price: 10 },
+        { name: "1.50 Sq mm Circuit (Single-phase)(Ft)", price: 20 }, 
+        { name: "2.50 Sq mm Circuit (Single-phase)(Ft)", price: 25 },
+        { name: "4.00 Sq mm Circuit (Single-phase)(Ft)", price: 30 },
+        { name: "6.00 Sq mm Circuit (Single-phase)(Ft)", price: 40 },
+        { name: "1.50 Sq mm Circuit (Three-phase)(Ft)", price: 25 }, 
+        { name: "2.50 Sq mm Circuit (Three-phase)(Ft)", price: 30 },
+        { name: "4.00 Sq mm Circuit (Three-phase)(Ft)", price: 40 },
+        { name: "6.00 Sq mm Circuit (Three-phase)(Ft)", price: 60 },
+        { name: "10.00 Sq mm Circuit (Three-phase)(Ft)", price: 80 },
+        { name: "Distribution fitting" },
+        { name: "Door bell fitting" , price: 50 },
+    ];
+
+    let currentItems = [];
+    let advancePayments = [];
+    let grandTotal = 0;
+    let totalAdvance = 0;
+    let docMode = 'bill';
+    let savedQrBase64 = localStorage.getItem('customQrImage') || '';
+
+    window.onload = function() {
+        document.getElementById('billDate').valueAsDate = new Date();
+        document.getElementById('advDate').valueAsDate = new Date();
+        
+        // Auto select current Financial Year based on today's date
+        setSelectedFinancialYear();
+
+        loadDatalist();
+        generateBillNumber();
+        renderHistory();
+        renderAdvanceTable();
+        updateDashboardStats();
+        if (savedQrBase64) document.getElementById('qrUploadStatus').style.display = 'inline';
+    };
+
+    // Helper: Find Financial Year from Date String (YYYY-MM-DD)
+    function getFinancialYear(dateString) {
+        if (!dateString) return '';
+        const dateObj = new Date(dateString);
+        const year = dateObj.getFullYear();
+        const month = dateObj.getMonth() + 1; // Jan = 1, Apr = 4
+        
+        if (month >= 4) {
+            return `${year}-${(year + 1).toString().slice(-2)}`;
+        } else {
+            return `${year - 1}-${year.toString().slice(-2)}`;
+        }
+    }
+
+    function setSelectedFinancialYear() {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const currentFY = getFinancialYear(todayStr);
+        const fySelect = document.getElementById('fySelect');
+        if (fySelect) {
+            fySelect.value = currentFY;
+        }
+    }
+
+    function updateDashboardStats() {
+        const selectedFY = document.getElementById('fySelect').value;
+        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        
+        // Update Labels
+        document.querySelectorAll('.selected-fy-label').forEach(el => el.innerText = selectedFY);
+
+        let totalRev = 0;
+        let totalPending = 0;
+        let billCount = 0;
+
+        savedBills.forEach(b => {
+            if (b.docMode === 'bill') {
+                const billFY = getFinancialYear(b.billDate);
+                if (billFY === selectedFY) {
+                    totalRev += (b.total || 0);
+                    totalPending += (b.remainingBalance || 0);
+                    billCount++;
+                }
+            }
+        });
+
+        document.getElementById('statRevenue').innerText = totalRev.toFixed(2);
+        document.getElementById('statTotalBills').innerText = billCount;
+        document.getElementById('statPending').innerText = totalPending.toFixed(2);
+    }
+
+    function handleQRUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                savedQrBase64 = e.target.result;
+                localStorage.setItem('customQrImage', savedQrBase64);
+                document.getElementById('qrUploadStatus').style.display = 'inline';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function setDocMode(mode) {
+        docMode = mode;
+        document.getElementById('tabBill').classList.toggle('active', mode === 'bill');
+        document.getElementById('tabQuotation').classList.toggle('active', mode === 'quotation');
+        document.getElementById('tabAdvance').classList.toggle('active', mode === 'advance');
+
+        if (mode === 'advance') {
+            document.getElementById('formTitle').innerHTML = '<i class="ri-coin-line"></i> Advance Entry';
+            document.getElementById('mainFormBlock').style.display = 'none';
+            document.getElementById('advanceSectionBlock').style.display = 'block';
+        } else {
+            document.getElementById('mainFormBlock').style.display = 'block';
+            document.getElementById('advanceSectionBlock').style.display = 'none';
+            document.getElementById('formTitle').innerHTML = mode === 'bill' ? '<i class="ri-shield-flash-line"></i> Create Invoice' : '<i class="ri-file-paper-line"></i> Create Quotation';
+            document.getElementById('noLabel').innerText = mode === 'bill' ? 'Bill No:' : 'Quotation No:';
+            document.getElementById('printBtnText').innerHTML = mode === 'bill' ? '<i class="ri-printer-line"></i> Print Document' : '<i class="ri-printer-line"></i> Print Quotation';
+            document.getElementById('grandTotalContainer').style.display = mode === 'bill' ? 'block' : 'none';
+            generateBillNumber();
+            updateTable();
+        }
+    }
+
+    function loadDatalist() {
+        const datalist = document.getElementById('itemListOptions');
+        datalist.innerHTML = '';
+        itemsList.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.name;
+            datalist.appendChild(option);
+        });
+    }
+
+    function autoFillPrice() {
+        const selectedName = document.getElementById('itemSearch').value.trim();
+        const foundItem = itemsList.find(item => item.name.toLowerCase() === selectedName.toLowerCase());
+        if (foundItem && foundItem.price !== undefined) {
+            document.getElementById('itemPrice').value = foundItem.price;
+        }
+    }
+
+    function generateBillNumber() {
+        const bills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        document.getElementById('billNo').value = (docMode === 'bill' ? 'INV-' : 'QTN-') + (bills.length + 101);
+    }
+
+    function addItem() {
+        const selectedName = document.getElementById('itemSearch').value.trim();
+        const price = parseFloat(document.getElementById('itemPrice').value) || 0;
+        const qty = parseFloat(document.getElementById('itemQty').value) || 0;
+
+        if (!selectedName || price <= 0 || qty <= 0) {
+            alert("Please enter valid item details.");
+            return;
+        }
+
+        currentItems.push({ name: selectedName, price, qty, total: price * qty });
+        updateTable();
+        document.getElementById('itemSearch').value = '';
+        document.getElementById('itemPrice').value = '';
+        document.getElementById('itemQty').value = '1';
+    }
+
+    function removeItem(index) {
+        currentItems.splice(index, 1);
+        updateTable();
+    }
+
+    function saveStandaloneAdvance() {
+        const party = document.getElementById('advPartyName').value.trim();
+        const amount = parseFloat(document.getElementById('advAmount').value) || 0;
+        const date = document.getElementById('advDate').value;
+        const method = document.getElementById('advMethod').value;
+
+        if (!party || amount <= 0 || !date) {
+            alert("Please enter party name and valid advance amount.");
+            return;
+        }
+
+        let savedAdvances = JSON.parse(localStorage.getItem('savedAdvances')) || [];
+        savedAdvances.push({ party, amount, date, method });
+        localStorage.setItem('savedAdvances', JSON.stringify(savedAdvances));
+
+        alert(`Advance of ₹${amount} saved for ${party}`);
+        document.getElementById('advPartyName').value = '';
+        document.getElementById('advAmount').value = '';
+        renderAdvanceTable();
+    }
+
+    function renderAdvanceTable() {
+        const tbody = document.getElementById('advanceTableBody');
+        tbody.innerHTML = '';
+        let savedAdvances = JSON.parse(localStorage.getItem('savedAdvances')) || [];
+
+        savedAdvances.forEach((adv, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td><b>${escapeHtml(adv.party)}</b></td>
+                    <td>${adv.date}</td>
+                    <td>₹${adv.amount.toFixed(2)}</td>
+                    <td>${adv.method}</td>
+                    <td style="text-align: center;">
+                        <button type="button" class="btn-delete-item" onclick="deleteAdvanceEntry(${index})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    function deleteAdvanceEntry(index) {
+        let savedAdvances = JSON.parse(localStorage.getItem('savedAdvances')) || [];
+        savedAdvances.splice(index, 1);
+        localStorage.setItem('savedAdvances', JSON.stringify(savedAdvances));
+        renderAdvanceTable();
+    }
+
+    function autoFetchAdvance() {
+        if (docMode !== 'bill') return;
+        const partyName = document.getElementById('partyName').value.trim().toLowerCase();
+        let savedAdvances = JSON.parse(localStorage.getItem('savedAdvances')) || [];
+        
+        advancePayments = savedAdvances.filter(adv => adv.party.toLowerCase() === partyName);
+        totalAdvance = advancePayments.reduce((sum, item) => sum + item.amount, 0);
+
+        document.getElementById('totalAdvancePaid').innerText = totalAdvance.toFixed(2);
+        document.getElementById('remainingBalance').innerText = (grandTotal - totalAdvance).toFixed(2);
+    }
+
+    function updateTable() {
+        const tbody = document.querySelector('#itemsTable tbody');
+        const headerRow = document.getElementById('tableHeaderRow');
+        tbody.innerHTML = '';
+        grandTotal = 0;
+
+        headerRow.innerHTML = docMode === 'bill' 
+            ? `<th>Item Description</th><th>Price</th><th>Qty</th><th>Total</th><th style="text-align: center;">Action</th>`
+            : `<th>Item Description</th><th>Price</th><th>Qty</th><th style="text-align: center;">Action</th>`;
+
+        currentItems.forEach((item, index) => {
+            grandTotal += item.total;
+            tbody.innerHTML += `
+                <tr>
+                    <td>${escapeHtml(item.name)}</td>
+                    <td>₹${item.price}</td>
+                    <td>${item.qty}</td>
+                    ${docMode === 'bill' ? `<td>₹${item.total.toFixed(2)}</td>` : ''}
+                    <td style="text-align: center;">
+                        <button type="button" class="btn-delete-item" onclick="removeItem(${index})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+        autoFetchAdvance();
+    }
+
+    function populatePrintableHTML(bill) {
+        const docType = bill.docMode === 'bill' ? 'INVOICE' : 'QUOTATION';
+        const noLabel = bill.docMode === 'bill' ? 'Bill No' : 'Quotation No';
+
+        document.getElementById('printDocType').innerText = docType;
+        document.getElementById('printNoLabel').innerText = noLabel;
+        document.getElementById('printBillNo').innerText = bill.billNo;
+        document.getElementById('printBillDate').innerText = bill.billDate;
+        document.getElementById('printPartyName').innerText = bill.partyName;
+        
+        const printTbody = document.getElementById('printItemsList');
+        const printTableHeader = document.getElementById('printTableHeader');
+        printTbody.innerHTML = '';
+
+        if (bill.docMode === 'bill') {
+            document.getElementById('printSummaryBox').style.display = 'block';
+            document.getElementById('printGrandTotal').innerText = bill.total.toFixed(2);
+            document.getElementById('printTotalAdvance').innerText = (bill.totalAdvance || 0).toFixed(2);
+            document.getElementById('printBalanceDue').innerText = (bill.remainingBalance || 0).toFixed(2);
+
+            printTableHeader.innerHTML = `<th style="padding: 6px;">Item Description</th><th style="padding: 6px;">Price</th><th style="padding: 6px;">Qty</th><th style="padding: 6px;">Total</th>`;
+            bill.items.forEach(item => {
+                printTbody.innerHTML += `<tr><td style="padding: 6px;">${escapeHtml(item.name)}</td><td style="padding: 6px;">₹${item.price}</td><td style="padding: 6px;">${item.qty}</td><td style="padding: 6px;">₹${item.total.toFixed(2)}</td></tr>`;
+            });
+
+            const advPrintTbody = document.getElementById('printAdvanceList');
+            advPrintTbody.innerHTML = '';
+            if (bill.advancePayments && bill.advancePayments.length > 0) {
+                document.getElementById('printAdvanceContainer').style.display = 'block';
+                bill.advancePayments.forEach(adv => {
+                    advPrintTbody.innerHTML += `<tr><td style="padding: 6px;">${adv.date}</td><td style="padding: 6px;">${adv.method}</td><td style="padding: 6px;">₹${adv.amount.toFixed(2)}</td></tr>`;
+                });
+            } else {
+                document.getElementById('printAdvanceContainer').style.display = 'none';
+            }
+
+            if (bill.qrImage) {
+                document.getElementById('uploadedQrPreview').src = bill.qrImage;
+                document.getElementById('qrContainer').style.display = 'flex';
+            } else {
+                document.getElementById('qrContainer').style.display = 'none';
+            }
+        } else {
+            document.getElementById('printSummaryBox').style.display = 'none';
+            document.getElementById('printAdvanceContainer').style.display = 'none';
+            document.getElementById('qrContainer').style.display = 'none';
+            printTableHeader.innerHTML = `<th style="padding: 6px;">Item Description</th><th style="padding: 6px;">Price</th><th style="padding: 6px;">Qty</th>`;
+            bill.items.forEach(item => {
+                printTbody.innerHTML += `<tr><td style="padding: 6px;">${escapeHtml(item.name)}</td><td style="padding: 6px;">₹${item.price}</td><td style="padding: 6px;">${item.qty}</td></tr>`;
+            });
+        }
+    }
+
+    function saveBillToStorage() {
+        const partyName = document.getElementById('partyName').value.trim();
+        if (!partyName || currentItems.length === 0) {
+            return null;
+        }
+
+        const newBill = {
+            docMode,
+            billNo: document.getElementById('billNo').value,
+            billDate: document.getElementById('billDate').value,
+            partyName,
+            qrImage: savedQrBase64,
+            items: [...currentItems],
+            advancePayments: [...advancePayments],
+            total: docMode === 'bill' ? grandTotal : null,
+            totalAdvance: docMode === 'bill' ? totalAdvance : null,
+            remainingBalance: docMode === 'bill' ? (grandTotal - totalAdvance) : null
+        };
+
+        let savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        savedBills.push(newBill);
+        localStorage.setItem('savedBills', JSON.stringify(savedBills));
+        renderHistory();
+        updateDashboardStats();
+        return newBill;
+    }
+
+    function saveAndPrintInvoice() {
+        const partyName = document.getElementById('partyName').value.trim();
+        if (!partyName || currentItems.length === 0) {
+            alert("Please fill party name and add items.");
+            return;
+        }
+
+        const currentBill = {
+            docMode,
+            billNo: document.getElementById('billNo').value,
+            billDate: document.getElementById('billDate').value,
+            partyName,
+            qrImage: savedQrBase64,
+            items: currentItems,
+            advancePayments: advancePayments,
+            total: grandTotal,
+            totalAdvance: totalAdvance,
+            remainingBalance: grandTotal - totalAdvance
+        };
+
+        populatePrintableHTML(currentBill);
+        window.print();
+        saveBillToStorage();
+        resetForm();
+    }
+
+    function generatePDF(bill) {
+        populatePrintableHTML(bill);
+
+        const element = document.getElementById('printableInvoice');
+        element.style.display = 'block';
+
+        const opt = {
+            margin:       [8, 8, 8, 8],
+            filename:     `${bill.billNo}_${bill.partyName}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            element.style.display = 'none';
+        });
+    }
+
+    function exportCurrentToPDF() {
+        const partyName = document.getElementById('partyName').value.trim();
+        if (!partyName || currentItems.length === 0) {
+            alert("Please fill party name and add items.");
+            return;
+        }
+        const bill = saveBillToStorage();
+        if (bill) { 
+            generatePDF(bill); 
+            resetForm(); 
+        }
+    }
+
+    function exportCurrentToExcel() {
+        const bill = saveBillToStorage();
+        if (bill) {
+            const isBill = bill.docMode !== 'quotation';
+            const excelData = [
+                [isBill ? "INVOICE" : "QUOTATION"], ["Laxmi Electrical"], ["Kalpesh Patel"], ["Mo: 7984109659"], [],
+                ["To:", bill.partyName], [isBill ? "Bill No:" : "Quotation No:", bill.billNo], ["Date:", bill.billDate], []
+            ];
+
+            if (isBill) {
+                excelData.push(["Item Description", "Price (Rs.)", "Qty", "Total (Rs.)"]);
+                bill.items.forEach(item => excelData.push([item.name, item.price, item.qty, item.total]));
+                excelData.push([]);
+                
+                if (bill.advancePayments && bill.advancePayments.length > 0) {
+                    excelData.push(["Advance Payment History"]);
+                    excelData.push(["Date", "Method", "Amount Paid (Rs.)"]);
+                    bill.advancePayments.forEach(adv => excelData.push([adv.date, adv.method, adv.amount]));
+                    excelData.push([]);
+                }
+
+                excelData.push(["", "", "Total Work Amount:", bill.total]);
+                excelData.push(["", "", "Total Advance Paid:", bill.totalAdvance]);
+                excelData.push(["", "", "Remaining Balance:", bill.remainingBalance]);
+            } else {
+                excelData.push(["Item Description", "Price (Rs.)", "Qty"]);
+                bill.items.forEach(item => excelData.push([item.name, item.price, item.qty]));
+            }
+
+            const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, isBill ? "Invoice" : "Quotation");
+            XLSX.writeFile(workbook, `${bill.billNo}_${bill.partyName}.xlsx`);
+            resetForm();
+        }
+    }
+
+    function renderHistory() {
+        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        const historyList = document.getElementById('historyList');
+        historyList.innerHTML = '';
+
+        savedBills.slice().reverse().forEach((bill, idx) => {
+            const actualIndex = savedBills.length - 1 - idx;
+            historyList.innerHTML += `
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <span style="color:#0f172a;">${escapeHtml(bill.partyName)}</span>
+                        <span style="color:var(--primary); font-size:11px;">${bill.docMode.toUpperCase()} (${bill.billNo})</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;">Date: ${bill.billDate}</div>
+                    ${bill.total ? `<div style="font-size:12px; font-weight:700; color:#334155; margin-top:4px;">Total: ₹${bill.total.toFixed(2)} | Balance: ₹${bill.remainingBalance.toFixed(2)}</div>` : ''}
+                    <div class="history-actions">
+                        <button class="btn-sm btn-pdf" onclick="exportSavedPDF(${actualIndex})">PDF</button>
+                        <button class="btn-sm btn-sm-delete" onclick="deleteBill(${actualIndex})">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function exportSavedPDF(index) {
+        const savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        if (savedBills[index]) generatePDF(savedBills[index]);
+    }
+
+    function deleteBill(index) {
+        let savedBills = JSON.parse(localStorage.getItem('savedBills')) || [];
+        savedBills.splice(index, 1);
+        localStorage.setItem('savedBills', JSON.stringify(savedBills));
+        renderHistory();
+        updateDashboardStats();
+    }
+
+    function searchBills() {
+        const filter = document.getElementById('searchParty').value.toLowerCase();
+        const items = document.querySelectorAll('.history-item');
+        items.forEach(item => {
+            item.style.display = item.innerText.toLowerCase().includes(filter) ? 'block' : 'none';
+        });
+    }
+
+    function resetForm() {
+        currentItems = [];
+        advancePayments = [];
+        totalAdvance = 0;
+        grandTotal = 0;
+        document.getElementById('partyName').value = '';
+        document.getElementById('itemSearch').value = '';
+        document.getElementById('itemPrice').value = '';
+        document.getElementById('itemQty').value = '1';
+        generateBillNumber();
+        updateTable();
+    }
+
+    function escapeHtml(text) {
+        return text ? text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+    }
+</script>
+
+</body>
+</html>
